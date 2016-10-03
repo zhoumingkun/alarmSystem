@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toughguy.alarmSystem.model.content.BaojingqingkuangETL">
+
+	<!-- 查询地级市添加数据时数据抽取数据 -->
+	<select id="findEtl" parameterType="BaojingqingkuangETL" resultType="BaojingqingkuangETL">
+		select * from etl_bjqk e where e.xzqh = #{xzqh} AND e.time like concat('%', #{tjyf} ,'%')  order by e.id DESC 
+	</select>
+
+</mapper>
