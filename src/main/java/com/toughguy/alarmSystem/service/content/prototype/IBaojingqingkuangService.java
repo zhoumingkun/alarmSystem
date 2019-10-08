@@ -97,4 +97,36 @@ public interface IBaojingqingkuangService extends IGenericService<Baojingqingkua
 	 * @return
 	 */
 	public String findIP(String ip);
+	
+	/**
+	 * 地级市添加报警情况根据行政区划查询抽取固定数据
+	 * @param bjqk
+	 * @return
+	 */
+	public List<Baojingqingkuang> findEtl(Baojingqingkuang bjqk);
+	
+	/**
+	 * 添加数据到假库（数据共享）
+	 * @param list
+	 * @return
+	 */
+	public String insertFalse(List<Baojingqingkuang> list);
+	
+	/**
+	 * 查询数据共享列表
+	 * @return
+	 */
+	public Map<String,Object> listFbjqk();
+	
+	/**
+	 * 查询数据共享列表
+	 * @return
+	 */
+	public Map<String,Object> selectFbjqk(String tjyf);
+	
+	/**
+	 * 查询数据共享列表
+	 * @return
+	 */
+	public List<Baojingqingkuang> selectTFbjqk(String tjyf);
 }

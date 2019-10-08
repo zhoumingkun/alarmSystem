@@ -108,6 +108,49 @@ public class BaojingqingkuangImpl extends GenericDaoImpl<Baojingqingkuang, Integ
 			// TODO Auto-generated method stub
 			return sqlSessionTemplate.selectOne(typeNameSpace + ".findIP",ip);
 		}
+
+		@Override
+		public List<Baojingqingkuang> findEtl(Baojingqingkuang bjqk) {
+			// TODO Auto-generated method stub
+			System.out.println("-------------------"+bjqk);
+			return sqlSessionTemplate.selectList(typeNameSpace + ".findEtl",bjqk);
+		}
+
+		@Override
+		public List<Baojingqingkuang> selectSave(String tjyf) {
+			// TODO Auto-generated method stub
+			return sqlSessionTemplate.selectList(typeNameSpace + ".selectSave",tjyf);
+		}
+
+		@Override
+		public void insertFalse(Baojingqingkuang bjqk) {
+			// TODO Auto-generated method stub
+			sqlSessionTemplate.insert(typeNameSpace + ".insertFalse",bjqk);
+		}
+
+		@Override
+		public void updateFalse(Baojingqingkuang bjqk) {
+			// TODO Auto-generated method stub
+			sqlSessionTemplate.update(typeNameSpace + ".updateFalse",bjqk);
+		}
+
+		@Override
+		public List<Baojingqingkuang> listFbjqk() {
+			// TODO Auto-generated method stub
+			return sqlSessionTemplate.selectList(typeNameSpace + ".listFbjqk");
+		}
+
+		@Override
+		public List<Baojingqingkuang> selectFbjqk(String tjyf) {
+			// TODO Auto-generated method stub
+			return sqlSessionTemplate.selectList(typeNameSpace + ".selectFbjqk",tjyf);
+		}
+
+		@Override
+		public Baojingqingkuang findFShenHj(String tjyf) {
+			// TODO Auto-generated method stub
+			return sqlSessionTemplate.selectOne(typeNameSpace + ".findFShenHj", tjyf);
+		}
 	
 	
 }

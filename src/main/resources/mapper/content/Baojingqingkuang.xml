@@ -86,7 +86,7 @@
 
 	<!-- 省厅查询报警情况统计表数据 -->
 	<select id="selectAll" parameterType="String" resultType="Baojingqingkuang">
-		SELECT bjqk,SUM(wffzaj) as wffzaj,SUM(zaaj) as zaaj,SUM(hzsg) as hzsg,SUM(jtsg) as jtsg,SUM(zazhsg) as zazhsg,SUM(zhsg) as zhsg,SUM(zs) as zs,SUM(jf) as jf,SUM(jtbl) as jtbl,SUM(gmqz) as gmqz,SUM(zsxr) as zsxr,SUM(jwjd) as jwjd,SUM(qt) as qt,SUM(hj) as hj 
+		SELECT bjqk,SUM(wffzaj) as wffzaj,SUM(zaaj) as zaaj,SUM(hzsg) as hzsg,SUM(jtsg) as jtsg,SUM(zazhsg) as zazhsg,SUM(zhsg) as zhsg,SUM(zs) as zs,SUM(jf) as jf,SUM(jtbl) as jtbl,SUM(gmqz) as gmqz,SUM(zsxr) as zsxr,SUM(jwjd) as jwjd,SUM(qt) as qt,SUM(hj) as hj ,tjyf ,xzqh,tbdw,tbr   
 		FROM bjqk 
 		WHERE tjyf like #{time}  group by bjqk;	
 	</select>
@@ -170,15 +170,60 @@
 		</where>
 	</sql>
 	
+	<!-- 修改数据开关状态 -->
 	<update id="etlSwitch" parameterType="String">
 		UPDATE etl_switch SET state=#{state} WHERE id=1
 	</update>
 	
+	<!-- 查询数据开关状态 -->
 	<select id="findSwitch" resultType="String">
 		select state from etl_switch where id=1
 	</select>
 	
+	<!-- 查询数据库该ip是否存在 -->
 	<select id="findIP" parameterType="String" resultType="String">
 		select id  from etl_ip where address=#{ip} AND state="1"
+	</select>
+	
+	<!-- 查询地级市添加数据时数据抽取数据 -->
+	<select id="findEtl" parameterType="Baojingqingkuang" resultType="Baojingqingkuang">
+		select * from etl_bjqk e where e.xzqh = #{xzqh} AND e.time like concat('%', #{tjyf} ,'%')  order by e.id DESC 
+	</select>
+	
+	<!-- 根据统计月份查询假库数据 -->
+	<select id="selectSave" parameterType="String" resultType="Baojingqingkuang">
+		select * from bjqk_false  where tjyf=#{tjyf}  AND state ="1"
+	</select>
+	
+	<!-- 添加假表数据 -->
+	<insert id="insertFalse" parameterType="Baojingqingkuang" keyProperty="id" useGeneratedKeys="true">
+		insert into bjqk_false (createTime,updateTime,xzqh,tbdw,bjqk,wffzaj,zaaj,hzsg,jtsg,zazhsg,zhsg,zs,jf,jtbl,gmqz,zsxr,jwjd,qt,hj,tbr,tjyf,state) 
+		values (#{createTime},#{updateTime},#{xzqh}, #{tbdw},#{bjqk},#{wffzaj},#{zaaj},#{hzsg},#{jtsg},#{zazhsg},#{zhsg},#{zs},#{jf},#{jtbl},#{gmqz},#{zsxr},#{jwjd},#{qt},#{hj},#{tbr},#{tjyf},#{state})
+	</insert>
+	
+	<!-- 省厅修改地级市数据 -->
+	<update id="updateFalse" parameterType="Baojingqingkuang" >
+		update bjqk_false set tbdw=#{tbdw},wffzaj=#{wffzaj},zaaj=#{zaaj},hzsg=#{hzsg},jtsg=#{jtsg},zazhsg=#{zazhsg},zhsg=#{zhsg},zs=#{zs},jf=#{jf},jtbl=#{jtbl},gmqz=#{gmqz},zsxr=#{zsxr},jwjd=#{jwjd},qt=#{qt},hj=#{hj},tbr=#{tbr}
+		where bjqk=#{bjqk} AND tjyf=#{tjyf}
+	</update>
+	
+	<!-- 查询假库统计列表月份 -->
+	<select id="listFbjqk" parameterType="Baojingqingkuang" resultType="Baojingqingkuang">
+		SELECT tjyf FROM bjqk_false GROUP BY tjyf
+	</select>
+	
+		<!-- 查询假库统计月份数据 -->
+	<select id="selectFbjqk" parameterType="Baojingqingkuang" resultType="Baojingqingkuang">
+		SELECT * FROM bjqk_false where tjyf=#{tjyf}
+	</select>
+	
+	<select id="findFShenHj" parameterType="String" resultType="Baojingqingkuang">
+		SELECT tbdw,tjyf,SUM(wffzaj) as wffzaj,SUM(zaaj) as zaaj,SUM(hzsg) as hzsg,SUM(jtsg) as jtsg,SUM(zazhsg) as zazhsg,SUM(zhsg) as zhsg,SUM(zs) as zs,SUM(jf) as jf,SUM(jtbl) as jtbl,SUM(gmqz) as gmqz,SUM(zsxr) as zsxr,SUM(jwjd) as jwjd,SUM(qt) as qt,SUM(hj) as hj 
+		FROM bjqk_false  
+		WHERE tjyf=#{tjyf} and bjqk!="出动警力" 
+		and bjqk!="处置报警(起)" and bjqk!="现场抓获违法犯罪人员(人)" 
+		and bjqk!="逃犯(人)" and bjqk!="救助伤员(人)" 
+		and bjqk!="救助群众(人)" and bjqk!="继续盘问(人)" 
+		and bjqk!="无效报警(起)" and bjqk!="死亡(人)" and bjqk!="受伤(人)" and bjqk!="合计";
 	</select>
 </mapper>

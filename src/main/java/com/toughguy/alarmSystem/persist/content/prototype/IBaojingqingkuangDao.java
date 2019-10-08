@@ -70,4 +70,51 @@ public interface IBaojingqingkuangDao extends IGenericDao<Baojingqingkuang, Inte
 	 */
 	public String findIP(String ip);
 	
+	/**
+	 * 地级市添加报警情况根据行政区划查询抽取固定数据
+	 * @param bjqk
+	 * @return
+	 */
+	public List<Baojingqingkuang> findEtl(Baojingqingkuang bjqk);
+	
+	/**
+	 * 根据统计月份查询假库是否存在该条数据
+	 * @param tjyf
+	 * @return
+	 */
+	public List<Baojingqingkuang> selectSave(String tjyf);
+	
+	/**
+	 * 添加数据到假库（数据共享）
+	 * @param tjyf
+	 * @return
+	 */
+	public void insertFalse(Baojingqingkuang bjqk);
+	
+	/**
+	 * 修改数据到假库（数据共享）
+	 * @param tjyf
+	 * @return
+	 */
+	public void updateFalse(Baojingqingkuang bjqk);
+
+	/**
+	 * 查询数据共享列表
+	 * @return
+	 */
+	public List<Baojingqingkuang> listFbjqk();
+
+	/**
+	 * 查询省假库汇总
+	 * @param tjyf
+	 * @return
+	 */
+	public List<Baojingqingkuang> selectFbjqk(String tjyf);
+	
+	/**
+	 * 查询假库省报警情况合计
+	 * @param tjyf
+	 * @return
+	 */
+	public Baojingqingkuang  findFShenHj(String tjyf);
 }

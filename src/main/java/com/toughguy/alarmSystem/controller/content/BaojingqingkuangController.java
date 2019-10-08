@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.codehaus.groovy.classgen.asm.BinaryObjectExpressionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -405,4 +406,53 @@ public class BaojingqingkuangController {
 	       
 	}
 	
+	
+	/**
+	 * 地级市添加报警情况查询抽取固定数据
+	 * @return
+	 */
+	@RequestMapping("/findEtl")
+	public List<Baojingqingkuang> findEtl(Baojingqingkuang bjqk){
+		return baojingqingkuangService.findEtl(bjqk);
+	}
+	
+	/**
+	 * 添加数据到假库（数据共享）
+	 * @param list
+	 * @return
+	 */
+	@RequestMapping("/addFbjqk")
+	public String insertFalse(@RequestBody List<Baojingqingkuang> list) {
+		System.out.println("0000000000000000000000000000"+list);
+		return baojingqingkuangService.insertFalse(list);
+	}
+	
+	/**
+	 * 查询数据共享列表
+	 * @return
+	 */
+	@RequestMapping("/listFbjqk")
+	public Map<String,Object> listFbjqk(){
+		return baojingqingkuangService.listFbjqk();
+	}
+	
+	/**
+	 * 查询省数据共享数据
+	 * @param tjyf
+	 * @return
+	 */
+	@RequestMapping("/selectFbjqk")
+	public Map<String,Object> selectFbjqk(String time){
+		return baojingqingkuangService.selectFbjqk(time);
+	}
+	
+	/**
+	 * 查询省厅详情
+	 * @param tjyf
+	 * @return
+	 */
+	@RequestMapping("/selectTFbjqk")
+	public List<Baojingqingkuang> selectTFbjqk(String time){
+		return baojingqingkuangService.selectTFbjqk(time);
+	}
 }

@@ -193,6 +193,19 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 		String date = "%"+time+"%";
 		List<Baojingqingkuang> list = ((IBaojingqingkuangDao)dao).selectAll(date);
 		Baojingqingkuang findShenHj = ((IBaojingqingkuangDao)dao).findShenHj(time);
+		if(list.size()>0 && list!=null) {
+			findShenHj.setBjqk("合计");
+			findShenHj.setXzqh("全省");
+			findShenHj.setTbdw("山西省公安厅");
+			findShenHj.setTbr("省厅");
+			findShenHj.setTjyf(list.get(0).getTjyf());
+		}
+		for(int i =0;i<list.size();i++) {
+			list.get(i).setXzqh("全省");
+			list.get(i).setXzqh("全省");
+			list.get(i).setTbdw("山西省公安厅");
+			list.get(i).setTbr("省厅");
+		}
 		Map<String,Object> map = new HashMap<>();
 		map.put("list", list);
 		int i =findShenHj.getWffzaj()+findShenHj.getZaaj()+findShenHj.getHzsg()+findShenHj.getJtsg()+findShenHj.getZazhsg()+findShenHj.getZhsg()+findShenHj.getZs()+findShenHj.getJf()+findShenHj.getJtbl()+findShenHj.getGmqz()+findShenHj.getZsxr()+findShenHj.getJwjd()+findShenHj.getQt();
@@ -241,6 +254,13 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 				Map<Object ,String> aaa = new HashMap<>();
 				String mc=list.get(i).getTjyf().substring(0, 4)+"年"+list.get(i).getTjyf().substring(5, 7)+"月全省报警情况统计月表";
 				aaa.put("mc", mc);
+				String tjyf = list.get(i).getTjyf();
+				List<Baojingqingkuang> selectSave =((IBaojingqingkuangDao)dao).selectSave(tjyf);			//查询省厅是否保存过该数据
+				if(selectSave!=null && selectSave.size()>0 ) {
+					aaa.put("save", "-1");			//保存过  不可继续保存
+				}else {
+					aaa.put("save", "1");			//没有保存过  还能继续保存
+				}
 				baojingList.put(list.get(i).getTjyf().substring(0, 7), aaa);
 			}
 			return baojingList;	
@@ -259,6 +279,13 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 				Map<Object ,String> aaa = new HashMap<>();
 				String mc=list.get(i).getTjyf().substring(0, 4)+"年"+list.get(i).getTjyf().substring(5, 7)+"月全省报警情况统计月表";
 				aaa.put("mc", mc);
+				String tjyf = list.get(i).getTjyf();
+				List<Baojingqingkuang> selectSave =((IBaojingqingkuangDao)dao).selectSave(tjyf);			//查询省厅是否保存过该数据
+				if(selectSave!=null && selectSave.size()>0 ) {
+					aaa.put("save", "-1");			//保存过  不可继续保存
+				}else {
+					aaa.put("save", "1");			//没有保存过  还能继续保存
+				}
 				baojingList.put(list.get(i).getTjyf().substring(0, 7), aaa);
 			}
 			return baojingList;
@@ -3510,8 +3537,7 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 		@Override
 		public List<Baojingqingkuang> etl_BJQK(String time) {
 			// TODO Auto-generated method stub
-			String date = "%"+time+"%";
-			List<Baojingqingkuang> list = ((IBaojingqingkuangDao)dao).selectAll(date);
+			List<Baojingqingkuang> list = ((IBaojingqingkuangDao)dao).selectSave(time);
 			Baojingqingkuang findShenHj = ((IBaojingqingkuangDao)dao).findShenHj(time);
 			try {
 				findShenHj.setBjqk("合计");
@@ -3520,7 +3546,6 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 				// TODO: handle exception
 				return null;
 			}
-			
 			return list;
 		}
 
@@ -3529,6 +3554,166 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 		public String findIP(String ip) {
 			// TODO Auto-generated method stub
 			return baojingqingkuangDao.findIP(ip);
+		}
+
+
+		@Override
+		public List<Baojingqingkuang> findEtl(Baojingqingkuang bjqk) {
+			// TODO Auto-generated method stub
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM");
+			String year =sf.format(date).substring(0,4);			//2019
+			String month =sf.format(date).substring(5,7);			//09
+			String time = sf.format(date);
+			if(month.equals("1")) {		//是一月份
+				int parseInt = Integer.parseInt(year)-1;		//年减一
+				month="12";
+				time=parseInt+"/"+month;
+			}else {
+				int Imonth =Integer.parseInt(month)-1;
+				String s = "";
+				if(Imonth<10) {
+					s ="0"+Imonth;
+				}
+				time=year+"/"+s;
+			}
+			bjqk.setTjyf(time);			//查询当前月份-1的数据
+			List<Baojingqingkuang> list=baojingqingkuangDao.findEtl(bjqk);
+			Set<String> set = new HashSet<>();
+			for(int a=0;a<list.size();a++) {
+				int iii=list.get(a).getZaaj()+list.get(a).getHzsg()+list.get(a).getJtsg()+list.get(a).getZhsg()+list.get(a).getJf()+list.get(a).getGmqz()
+						+list.get(a).getJwjd()+list.get(a).getQt();
+				list.get(a).setHj(iii);
+				set.add(list.get(a).getBjqk());
+			}
+			//此处需要判断110接警那一列本该传过来  但是一月中就没有该类型的情况
+			List<String> arr = new ArrayList<>();
+			arr.add("110接警");
+			arr.add("执勤巡逻发现");
+			arr.add("器材报警");
+			arr.add("口头报警");
+			arr.add("电话报警");
+			arr.add("短信微信报警");
+			arr.add("举报");
+			arr.add("扭送现行");
+			arr.add("投案自首");
+			arr.add("其他部门移送");
+			arr.add("其他");
+			arr.add("出动警力");
+			arr.add("处置报警(起)");
+			arr.add("现场抓获违反犯罪人员(人)");
+			arr.add("逃犯(人)");
+			arr.add("救助伤员(人)");
+			arr.add("救助群众(人)");
+			arr.add("继续盘问(人)");
+			arr.add("无效报警(起)");
+			arr.add("死亡(人)");
+			arr.add("受伤(人)");
+			for (String ss : set) {
+				for(int b =0;b<arr.size();b++) {
+					if(ss.equals(arr.get(b))) {
+						arr.remove(b);
+					}
+				}
+			}
+			//String[] s =new String [] {"执勤巡逻发现","器材报警","电话报警","短信微信报警","举报","扭送现行","投案自首","其他部门移送","其他","出动警力","处置报警(起)","现场抓获违反犯罪人员(人)","逃犯(人)","救助伤员(人)","救助群众(人)","继续盘问(人)","无效报警(起)","死亡(人)","受伤(人)"};
+			for(int i =0;i<arr.size();i++) {
+				Baojingqingkuang b = new Baojingqingkuang();
+				b.setBjqk(arr.get(i));
+				b.setWffzaj(-1);
+				b.setZaaj(-1);
+				b.setHzsg(-1);
+				b.setJtsg(-1);
+				b.setZazhsg(-1);
+				b.setZhsg(-1);
+				b.setZs(-1);
+				b.setJf(-1);
+				b.setJtbl(-1);
+				b.setGmqz(-1);
+				b.setZsxr(-1);
+				b.setJwjd(-1);
+				b.setQt(-1);
+				b.setHj(-1);
+				list.add(b);
+			}
+			return list;
+		}
+
+
+		@Override
+		public String insertFalse(List<Baojingqingkuang> list) {
+			// TODO Auto-generated method stub
+			List<Baojingqingkuang> selectSave = baojingqingkuangDao.selectSave(list.get(0).getTjyf());
+			if(selectSave!=null && selectSave.size()>0) {
+				//查出来  update
+				try {
+					for(int i =0;i<list.size();i++) {
+						baojingqingkuangDao.updateFalse(list.get(i));
+					}
+					//查询修改合计-------------------------------------------------
+					System.out.println("1234567890");
+					Baojingqingkuang findFShenHj = baojingqingkuangDao.findFShenHj(list.get(0).getTjyf());
+					findFShenHj.setBjqk("合计");
+					System.out.println("-----------------------1"+findFShenHj);
+					baojingqingkuangDao.updateFalse(findFShenHj);
+					return "{ \"success\" : true }";	
+				}catch (Exception e) {
+					// TODO: handle exception
+					return  "{ \"success\" : false, \"msg\" : \"操作失败\" }";
+				}
+			}else {
+				try {
+					for(int i =0;i<list.size();i++) {
+						list.get(i).setState("1");
+						baojingqingkuangDao.insertFalse(list.get(i));
+					}
+					return "{ \"success\" : true }";	
+				}catch (Exception e) {
+					// TODO: handle exception
+					return  "{ \"success\" : false, \"msg\" : \"操作失败\" }";
+				}
+			}
+		}
+
+
+		@Override
+		public Map<String, Object> listFbjqk() {
+			// TODO Auto-generated method stub
+			List<Baojingqingkuang> tjyf = baojingqingkuangDao.listFbjqk();
+			Map<String,Object> map = new HashMap<>();
+			if(tjyf!=null && tjyf.size()>0) {
+				for(int i=0; i<tjyf.size();i++) {
+					Map<String,Object> obj = new HashMap<>();
+					String mc=tjyf.get(i).getTjyf().substring(0, 4)+"年"+tjyf.get(i).getTjyf().substring(5, 7)+"月全省报警情况统计月表";
+					obj.put("mc",mc);
+					obj.put("mc",mc);
+					map.put(tjyf.get(i).getTjyf().substring(0, 7), obj);
+				}
+			}
+			return map;
+		}
+
+
+		@Override
+		public Map<String,Object> selectFbjqk(String tjyf) {
+			// TODO Auto-generated method stub
+			List<Baojingqingkuang> list = baojingqingkuangDao.selectFbjqk(tjyf);
+			Map<String,Object> map = new HashMap<>();
+			map.put("list", list);
+			for(int i =0;i<list.size();i++) {
+				if(list.get(i).getBjqk().equals("合计")) {
+					map.put("hj", list.get(i).getHj());
+					map.put("HJ", list.get(i));
+				}
+			}
+			return map;
+		}
+
+
+		@Override
+		public List<Baojingqingkuang> selectTFbjqk(java.lang.String tjyf) {
+			// TODO Auto-generated method stub
+			return baojingqingkuangDao.selectFbjqk(tjyf);
 		}
 
 }

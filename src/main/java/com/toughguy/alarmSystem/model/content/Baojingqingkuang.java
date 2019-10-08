@@ -32,6 +32,7 @@ public class Baojingqingkuang extends AbstractModel {
 	private String tbr;   //填报人
 	private String tjyf;	//统计月份
 	private String state;	//状态   正常1   非正常-1
+	private String time;	//原数据接警时间
 	
 	public int getId() {
 		return id;
@@ -163,17 +164,19 @@ public class Baojingqingkuang extends AbstractModel {
 	public void setState(String state) {
 		this.state = state;
 	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
 	@Override
 	public String toString() {
 		return "Baojingqingkuang [id=" + id + ", xzqh=" + xzqh + ", tbdw=" + tbdw + ", bjqk=" + bjqk + ", wffzaj="
 				+ wffzaj + ", zaaj=" + zaaj + ", hzsg=" + hzsg + ", jtsg=" + jtsg + ", zazhsg=" + zazhsg + ", zhsg="
 				+ zhsg + ", zs=" + zs + ", jf=" + jf + ", jtbl=" + jtbl + ", gmqz=" + gmqz + ", zsxr=" + zsxr
 				+ ", jwjd=" + jwjd + ", qt=" + qt + ", hj=" + hj + ", tbr=" + tbr + ", tjyf=" + tjyf + ", state="
-				+ state + "]";
+				+ state + ", time=" + time + "]";
 	}
 
-	
-	
-
-	
 }
