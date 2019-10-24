@@ -455,4 +455,14 @@ public class BaojingqingkuangController {
 	public List<Baojingqingkuang> selectTFbjqk(String time){
 		return baojingqingkuangService.selectTFbjqk(time);
 	}
+	
+	/**
+	 * 查询数据共享状态
+	 * @param time
+	 * @return
+	 */
+	@RequestMapping("/findDataState")
+	public  Map<String,String> findDataState(String time){
+		return baojingqingkuangService.findDataState(time);
+	}
 }

@@ -129,4 +129,11 @@ public interface IBaojingqingkuangService extends IGenericService<Baojingqingkua
 	 * @return
 	 */
 	public List<Baojingqingkuang> selectTFbjqk(String tjyf);
+
+	/**
+	 * 查询数据共享状态
+	 * @param time
+	 * @return
+	 */
+	public Map<String, String> findDataState(String time);
 }

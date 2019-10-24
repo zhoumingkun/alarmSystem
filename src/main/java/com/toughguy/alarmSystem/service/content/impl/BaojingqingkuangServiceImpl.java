@@ -3716,4 +3716,19 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 			return baojingqingkuangDao.selectFbjqk(tjyf);
 		}
 
+
+		@Override
+		public Map<String, String> findDataState(String time) {
+			// TODO Auto-generated method stub
+			List<Baojingqingkuang> list = baojingqingkuangDao.selectFbjqk(time);
+			Map<String,String> map = new HashMap<>();
+			if(list.size()>0 && list!=null ) {
+				map.put("state", "-1");
+				return map;
+			}else {
+				map.put("state", "1");
+				return map;
+			}
+		}
+
 }
