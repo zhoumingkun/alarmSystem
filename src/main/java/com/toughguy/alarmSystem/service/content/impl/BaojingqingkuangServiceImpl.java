@@ -3568,14 +3568,14 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 			if(month.equals("1")) {		//是一月份
 				int parseInt = Integer.parseInt(year)-1;		//年减一
 				month="12";
-				time=parseInt+"/"+month;
+				time=parseInt+"-"+month;
 			}else {
 				int Imonth =Integer.parseInt(month)-1;
 				String s = "";
 				if(Imonth<10) {
 					s ="0"+Imonth;
 				}
-				time=year+"/"+s;
+				time=year+"-"+s;
 			}
 			bjqk.setTjyf(time);			//查询当前月份-1的数据
 			List<Baojingqingkuang> list=baojingqingkuangDao.findEtl(bjqk);
