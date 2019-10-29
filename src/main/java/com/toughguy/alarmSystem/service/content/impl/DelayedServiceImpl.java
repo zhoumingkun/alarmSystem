@@ -27,7 +27,7 @@ public class DelayedServiceImpl extends GenericServiceImpl<Delayed, Integer> imp
 			delayed.setDateStart(delayedStart+"-01");			//2019-09-01
 			delayed.setDateStop(delayedStart+"-10");			//2019-09-10
 			delayed.setDelayedStart(time);
-			int day = Integer.parseInt(time.substring(5,7));	//月
+			int day = Integer.parseInt(time.substring(8));	//月
 			String delayedStop =time.substring(0,7)+"-"+(day+(Integer.parseInt(delayed.getDelayedDay())));
 			sf.setLenient(false);
 			try{
