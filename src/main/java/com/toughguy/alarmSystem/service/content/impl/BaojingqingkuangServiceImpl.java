@@ -3537,16 +3537,18 @@ public class BaojingqingkuangServiceImpl extends GenericServiceImpl<Baojingqingk
 		@Override
 		public List<Baojingqingkuang> etl_BJQK(String time) {
 			// TODO Auto-generated method stub
-			List<Baojingqingkuang> list = ((IBaojingqingkuangDao)dao).selectSave(time);
-			Baojingqingkuang findShenHj = ((IBaojingqingkuangDao)dao).findShenHj(time);
+			
+			//Baojingqingkuang findShenHj = ((IBaojingqingkuangDao)dao).findFShenHj(time);
 			try {
-				findShenHj.setBjqk("合计");
-				list.add(findShenHj);
+				//findShenHj.setBjqk("合计");
+				//list.add(findShenHj);
+				List<Baojingqingkuang> list = ((IBaojingqingkuangDao)dao).selectSave(time);
+				return list;
 			}catch (Exception e) {
 				// TODO: handle exception
 				return null;
 			}
-			return list;
+			
 		}
 
 
