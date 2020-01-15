@@ -52,10 +52,11 @@ public class BaojingqingkuangController {
 		String time1 = sf.format(date).substring(0, 7);		//2019-09
 		dela.setDateStart(time1+"-01");
 		Delayed two = delayedDao.findOne(dela);
-		String ss = time3.substring(8);		//09   日
-		if(two==null && Integer.parseInt(ss)>10){
+		String ss = time3.substring(8);		//09   日	
+		if((two==null ||two.equals(null)) && Integer.parseInt(ss)>10){
 			return "{ \"success\" : false, \"msg\" : \"该操作已过期，请联系管理员\" }";
-		}else if(two !=null && Integer.parseInt(two.getDelayedStop().substring(8))<Integer.parseInt(time3.substring(8)) && two.getState().equals("-1")) {
+		} 
+		if(two !=null && Integer.parseInt(two.getDelayedStop().substring(8))<Integer.parseInt(time3.substring(8)) && two.getState().equals("-1")) {
 			return "{ \"success\" : false, \"msg\" : \"该操作已过期\" }";
 		}
 		String time = sf.format(date).substring(0,4);		//截取年
